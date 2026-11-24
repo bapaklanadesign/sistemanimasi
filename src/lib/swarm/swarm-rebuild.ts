@@ -29,7 +29,11 @@ const CSS = `#rb{position:absolute;left:0;top:0;width:100%;overflow:hidden;z-ind
 #rb-sweep{position:fixed;left:0;right:0;top:0;height:2px;background:#00D4FF;box-shadow:0 0 18px 4px rgba(0,212,255,.6);z-index:2147483001;pointer-events:none;animation:rbs 1.3s ease-in forwards}
 @keyframes rbs{to{transform:translateY(100vh)}}
 #rb-hud{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:2147483002;pointer-events:none;font:11px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#00D4FF;letter-spacing:1px;text-shadow:0 0 8px rgba(0,212,255,.6);background:rgba(6,23,46,.75);border:1px solid rgba(0,212,255,.3);border-radius:8px;padding:6px 10px}
-#rb-skip{position:fixed;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2147483002;background:rgba(6,23,46,.85);color:#CFE3FA;border:1px solid rgba(22,139,255,.4);border-radius:999px;padding:8px 16px;font:600 12px system-ui,sans-serif;letter-spacing:.5px;cursor:pointer;pointer-events:auto}`;
+#rb-skip{position:fixed;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2147483002;background:rgba(6,23,46,.85);color:#CFE3FA;border:1px solid rgba(22,139,255,.4);border-radius:999px;padding:8px 16px;font:600 12px system-ui,sans-serif;letter-spacing:.5px;cursor:pointer;pointer-events:auto;min-height:44px;touch-action:manipulation}
+#rb-skip:focus-visible{outline:2px solid #00D4FF;outline-offset:2px}
+@media (max-width:699px){#rb-hud{left:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:9px;line-height:1.35;padding:5px 8px;letter-spacing:.5px;max-width:46vw}
+#rb-skip{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));min-height:48px;padding:0 20px;font-size:13px}
+.rb-cur svg{width:20px;height:20px}.rb-cur i{left:15px;top:17px;font-size:9px;padding:2px 5px}}`;
 
 type Item = { el: HTMLElement; st: 0 | 1 | 2; r: { l: number; t: number; w: number; h: number } | null; prev: string };
 type Cur = { e: HTMLDivElement; c: string; x: number; y: number; st: string; item: Item | null; sm: number; cu: number; t0: number; dur: number; fx: number; fy: number; tx: number; ty: number; dw: number; b: HTMLElement | null; sc: HTMLElement | null };
@@ -74,7 +78,7 @@ export function start(p?: Partial<SwarmConfig>): boolean {
   R.style.scrollBehavior = "auto"; window.scrollTo(0, 0); R.style.overflow = "hidden";
   const mob = innerWidth < 700, nav = navigator as Navigator & { deviceMemory?: number };
   const low = (nav.hardwareConcurrency || 4) <= 2 || (nav.deviceMemory || 4) <= 2;
-  const NC = C.cursors || (low ? 3 : mob ? 4 : 7);
+  const NC = C.cursors || (low ? 3 : innerWidth < 420 ? 4 : mob ? 5 : 7);
   const W = () => innerWidth, H = () => innerHeight, DH = R.scrollHeight;
   const style = D.createElement("style"); style.textContent = CSS; D.head.appendChild(style);
   const ov = D.createElement("div"); ov.id = "rb"; ov.style.height = DH + "px"; ov.setAttribute("aria-hidden", "true"); B.appendChild(ov);
