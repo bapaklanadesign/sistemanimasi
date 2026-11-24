@@ -9,13 +9,14 @@ export const DEFAULT_ORDER = [
   "header a[aria-label], header .j-logo, header [class*='logo']", "header nav a", "header button, header .j-btn",
   "main h1", "main section:first-of-type p", "main img, main svg.j-hero-art, main [data-scene] .j-stage > *",
   "main a.j-btn, main button", "main [class*='card']", "main h2", "main section p", "main table, main dl, main form",
+  "main section .j-wrap > *, main section > div, main section > *",
   "footer .j-wrap > *, footer",
 ];
 export const DEFAULT_CONFIG: SwarmConfig = {
   auto: true, speed: 1, spread: 1, dwell: 1, cursors: null,
   colors: ["#FF3B4E", "#168BFF", "#00D4FF", "#2BE38B", "#FFD60A", "#A66BFF", "#FF7200"],
   names: ["Ayu", "Bima", "Citra", "Dani", "Eka", "Fajar", "Gita"],
-  order: DEFAULT_ORDER, maxElements: 24, timeoutMs: 70000,
+  order: DEFAULT_ORDER, maxElements: 140, timeoutMs: 240000,
 };
 const CSS = `#rb{position:absolute;left:0;top:0;width:100%;overflow:hidden;z-index:2147483000;pointer-events:none}
 .rb-cur{position:absolute;left:0;top:0;opacity:0;transition:opacity .4s;will-change:transform}
@@ -52,7 +53,8 @@ export function collectTargets(doc: Document, order: string[], max: number): HTM
       if (el.closest("#rb,#rb-hud,#rb-skip,[data-sonner-toaster]")) continue;
       if (out.some((o) => o === el || o.contains(el) || el.contains(o))) continue;
       const r = el.getBoundingClientRect();
-      if (r.width > 2 && r.height > 2) out.push(el);
+      const vis = (el as HTMLElement & { checkVisibility?: (o: object) => boolean }).checkVisibility?.({ visibilityProperty: true, opacityProperty: true }) ?? true;
+      if (r.width > 2 && r.height > 2 && vis && r.top + (doc.defaultView?.scrollY ?? 0) >= 0) out.push(el);
     }
   }
   return out;
@@ -104,7 +106,7 @@ export function start(p?: Partial<SwarmConfig>): boolean {
   function claim(c: Cur, now: number) {
     const it = items.find((i) => i.st === 0); if (!it) return;
     const r = it.el.getBoundingClientRect(), s = scrollY; it.r = { l: r.left, t: r.top + s, w: r.width, h: r.height };
-    if (!(it.r.t + it.r.h > s + 8 && it.r.t < s + H() - 40)) { if (!active()) goal = cl(it.r.t - H() * 0.3, 0, Math.max(0, DH - H())); return; }
+    if (!(it.r.t + it.r.h > s + 8 && it.r.t < s + H() - 40)) { if (!active()) { const g = cl(it.r.t - H() * 0.3, 0, Math.max(0, DH - H())); if (g === goal && Math.abs(sy - goal) < 1) { it.st = 2; done++; } else goal = g; } return; }
     it.st = 1; c.item = it; goTo(c, it.r.l + it.r.w * (0.05 + 0.25 * rnd()), it.r.t + it.r.h * (0.3 + 0.4 * rnd()), now);
   }
   function click(c: Cur, now: number) {
@@ -155,8 +157,9 @@ export function start(p?: Partial<SwarmConfig>): boolean {
       }
       if (ph >= 1) cs.forEach((c) => c.st !== "hold" && upd(c, now, sy));
       if (ph >= 2) {
-        sy += (goal - sy) * 0.07; if (Math.abs(goal - sy) < 0.5) sy = goal; window.scrollTo(0, sy);
-        if (ph === 2 && done === items.length) { ph = 3; goal = 0; cs.forEach((c, i) => later(() => (c.e.style.opacity = "0"), i * 120)); later(finish, 1600); }
+        if (ph === 2) sy += (goal - sy) * 0.07; if (Math.abs(goal - sy) < 0.5) sy = goal; window.scrollTo(0, sy);
+        if (ph === 2 && done === items.length) { ph = 3; goal = 0; cs.forEach((c, i) => later(() => (c.e.style.opacity = "0"), i * 120)); }
+        if (ph === 3) { sy += (0 - sy) * 0.03 - Math.sign(sy) * 2; if (sy < 1) { sy = 0; window.scrollTo(0, 0); ph = 4; later(finish, 500); } }
       }
       if (!(fr++ % 6)) renderHud();
     } catch (e) { console.error(e); finish(); }
