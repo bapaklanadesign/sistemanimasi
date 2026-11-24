@@ -1,0 +1,100 @@
+[
+  {
+    "capability": "code",
+    "source": "src",
+    "outcome": "migrate",
+    "status": "in_progress",
+    "next_action": "Import source preserving existing design"
+  },
+  {
+    "capability": "schema",
+    "source": "supabase/migrations",
+    "outcome": "migrate",
+    "status": "in_progress",
+    "next_action": "Adapt and apply schema"
+  },
+  {
+    "capability": "records",
+    "source": "ZIP: no record export",
+    "outcome": "migrate",
+    "status": "pending",
+    "next_action": "Attach per-table CSV or JSON exports"
+  },
+  {
+    "capability": "auth identities",
+    "source": "No user export",
+    "outcome": "migrate",
+    "status": "pending",
+    "next_action": "Attach users with original IDs, email, profiles and roles"
+  },
+  {
+    "capability": "authorization",
+    "source": "RLS and four roles",
+    "outcome": "migrate",
+    "status": "in_progress",
+    "next_action": "Preserve server enforced access"
+  },
+  {
+    "capability": "uploaded file bytes",
+    "source": "Bundled assets and public images",
+    "outcome": "preserve",
+    "status": "in_progress",
+    "next_action": "Register images with asset storage"
+  },
+  {
+    "capability": "external providers",
+    "source": "WhatsApp, social links",
+    "outcome": "preserve",
+    "status": "in_progress",
+    "next_action": "Verify links"
+  },
+  {
+    "capability": "public endpoints",
+    "source": "Public content routes, database RPCs",
+    "outcome": "preserve",
+    "status": "in_progress",
+    "next_action": "Move auth administration to server functions"
+  },
+  {
+    "capability": "callbacks",
+    "source": "No OAuth or webhook call sites found",
+    "outcome": "not_detected",
+    "status": "verified",
+    "next_action": "None"
+  },
+  {
+    "capability": "webhooks",
+    "source": "No webhook call sites found",
+    "outcome": "not_detected",
+    "status": "verified",
+    "next_action": "None"
+  },
+  {
+    "capability": "schedules",
+    "source": "No cron definitions found",
+    "outcome": "not_detected",
+    "status": "verified",
+    "next_action": "None"
+  },
+  {
+    "capability": "secrets",
+    "source": "Old project env excluded; Cloud bindings generated",
+    "outcome": "replace",
+    "status": "in_progress",
+    "next_action": "Use generated Cloud client"
+  },
+  {
+    "capability": "cutover",
+    "source": "Old production URL not supplied",
+    "outcome": "pending",
+    "status": "pending",
+    "next_action": "Publish only when requested"
+  },
+  {
+    "capability": "verification",
+    "source": "Browser and existing tests",
+    "outcome": "verify",
+    "status": "in_progress",
+    "next_action": "Verify public and authenticated flows"
+  }
+]

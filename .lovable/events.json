@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.koli_label_problem": {
+      "event_schema_version": 1,
+      "description": "A scanned koli label was saved as problematic (not an MR Express label, invalid number, other Packing List, or koli total mismatch).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "not_mrx",
+              "invalid_number",
+              "other_pl",
+              "total_mismatch"
+            ]
+          }
+        }
+      }
+    },
+    "project.koli_qr_scanned": {
+      "event_schema_version": 1,
+      "description": "A staff member scanned or entered a koli label code on the Scan Label Koli page.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "result",
+          "source"
+        ],
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "problem",
+              "duplicate"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "camera",
+              "manual"
+            ]
+          }
+        }
+      }
+    },
+    "project.koli_verified": {
+      "event_schema_version": 1,
+      "description": "A scanned koli label matched its Packing List and was saved as verified.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "camera",
+              "manual"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
