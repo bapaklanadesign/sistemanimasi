@@ -1,7 +1,9 @@
 # Project roadmap
 - [ ] Import and run all existing pages and media.
 - [ ] Recreate application data and enforce existing roles in Lovable Cloud.
-- [ ] Verify public pages and a signed-in packing-list workflow.
+- [x] Verify public pages (all render clean; staff pages redirect signed-out visitors to login).
+- [ ] Verify a signed-in packing-list workflow (needs a staff sign-in I can use).
+- [x] Automated checks all run: 17 files, 128 tests passing.
 - [ ] Import existing records and users (waiting for CSV/JSON exports).
 - [ ] Publish/cut over production (waiting for user request).
 - [x] Koli label range printing and QR scan verification with AI summary.
