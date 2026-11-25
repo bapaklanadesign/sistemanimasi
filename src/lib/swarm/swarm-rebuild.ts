@@ -57,7 +57,9 @@ export function collectTargets(doc: Document, order: string[], max: number): HTM
       if (r.width > 2 && r.height > 2 && vis && r.top + (doc.defaultView?.scrollY ?? 0) >= 0) out.push(el);
     }
   }
-  return out;
+  const sy = doc.defaultView?.scrollY ?? 0;
+  const pos = new Map(out.map((el) => { const r = el.getBoundingClientRect(); return [el, [r.top + sy, r.left]] as const; }));
+  return out.sort((a, b) => { const A = pos.get(a)!, B = pos.get(b)!; return Math.abs(A[0] - B[0]) > 8 ? A[0] - B[0] : A[1] - B[1]; });
 }
 
 let cfg: SwarmConfig = { ...DEFAULT_CONFIG };
