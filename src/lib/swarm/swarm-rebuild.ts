@@ -29,11 +29,9 @@ const CSS = `#rb{position:absolute;left:0;top:0;width:100%;overflow:hidden;z-ind
 @keyframes rbr{to{transform:scale(5);opacity:0}}
 #rb-sweep{position:fixed;left:0;right:0;top:0;height:2px;background:#00D4FF;box-shadow:0 0 18px 4px rgba(0,212,255,.6);z-index:2147483001;pointer-events:none;animation:rbs 1.3s ease-in forwards}
 @keyframes rbs{to{transform:translateY(100vh)}}
-#rb-hud{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:2147483002;pointer-events:none;font:11px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#00D4FF;letter-spacing:1px;text-shadow:0 0 8px rgba(0,212,255,.6);background:rgba(6,23,46,.75);border:1px solid rgba(0,212,255,.3);border-radius:8px;padding:6px 10px}
 #rb-skip{position:fixed;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2147483002;background:rgba(6,23,46,.85);color:#CFE3FA;border:1px solid rgba(22,139,255,.4);border-radius:999px;padding:8px 16px;font:600 12px system-ui,sans-serif;letter-spacing:.5px;cursor:pointer;pointer-events:auto;min-height:44px;touch-action:manipulation}
 #rb-skip:focus-visible{outline:2px solid #00D4FF;outline-offset:2px}
-@media (max-width:699px){#rb-hud{left:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:9px;line-height:1.35;padding:5px 8px;letter-spacing:.5px;max-width:46vw}
-#rb-skip{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));min-height:48px;padding:0 20px;font-size:13px}
+@media (max-width:699px){#rb-skip{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));min-height:48px;padding:0 20px;font-size:13px}
 .rb-cur svg{width:20px;height:20px}.rb-cur i{left:15px;top:17px;font-size:9px;padding:2px 5px}}`;
 
 type Item = { el: HTMLElement; st: 0 | 1 | 2; r: { l: number; t: number; w: number; h: number } | null; prev: string };
@@ -50,7 +48,7 @@ export function collectTargets(doc: Document, order: string[], max: number): HTM
     try { list = [...doc.querySelectorAll<HTMLElement>(sel)]; } catch { continue; }
     for (const el of list) {
       if (out.length >= max) return out;
-      if (el.closest("#rb,#rb-hud,#rb-skip,[data-sonner-toaster]")) continue;
+      if (el.closest("#rb,#rb-skip,[data-sonner-toaster]")) continue;
       if (out.some((o) => o === el || o.contains(el) || el.contains(o))) continue;
       const r = el.getBoundingClientRect();
       const vis = (el as HTMLElement & { checkVisibility?: (o: object) => boolean }).checkVisibility?.({ visibilityProperty: true, opacityProperty: true }) ?? true;
@@ -86,13 +84,12 @@ export function start(p?: Partial<SwarmConfig>): boolean {
   const W = () => innerWidth, H = () => innerHeight, DH = R.scrollHeight;
   const style = D.createElement("style"); style.textContent = CSS; D.head.appendChild(style);
   const ov = D.createElement("div"); ov.id = "rb"; ov.style.height = DH + "px"; ov.setAttribute("aria-hidden", "true"); B.appendChild(ov);
-  const hud = D.createElement("div"); hud.id = "rb-hud"; hud.setAttribute("role", "status");
   const skip = D.createElement("button"); skip.id = "rb-skip"; skip.type = "button"; skip.textContent = "LEWATI ANIMASI";
-  B.append(hud, skip);
+  B.append(skip);
   const timers = new Set<number>();
   const later = (f: () => void, ms: number) => { const id = window.setTimeout(() => { timers.delete(id); f(); }, ms); timers.add(id); };
   const mk = (cls: string, css: string) => { const e = D.createElement("div"); e.className = cls; e.style.cssText = css; ov.appendChild(e); return e; };
-  let ph = 0, t0 = 0, t1 = 0, done = 0, goal = 0, sy = 0, raf = 0, fr = 0;
+  let ph = 0, t0 = 0, t1 = 0, done = 0, goal = 0, sy = 0, raf = 0;
   const cs: Cur[] = Array.from({ length: NC }, (_, i) => {
     const c = C.colors[i % C.colors.length] ?? "#00D4FF", e = D.createElement("div"); e.className = "rb-cur";
     e.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 2v17l4.6-4.3 3.2 7.3 2.6-1.1-3.1-7.1H18z" fill="${c}" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg><i style="background:${c}">${C.names[i % C.names.length] ?? "Op" + (i + 1)}</i>`;
@@ -143,7 +140,6 @@ export function start(p?: Partial<SwarmConfig>): boolean {
     }
     c.e.style.transform = `translate3d(${c.x}px,${c.y}px,0)`;
   }
-  const renderHud = () => { hud.innerHTML = `SWARM REBUILD<br>${NC} OPERATORS<br>${done}/${items.length} ELEMENTS`; };
   function frame(now: number) {
     if (!running) return; raf = requestAnimationFrame(frame);
     try {
@@ -163,7 +159,6 @@ export function start(p?: Partial<SwarmConfig>): boolean {
         if (ph === 2 && done === items.length) { ph = 3; goal = 0; cs.forEach((c, i) => later(() => (c.e.style.opacity = "0"), i * 120)); }
         if (ph === 3) { sy += (0 - sy) * 0.03 - Math.sign(sy) * 2; if (sy < 1) { sy = 0; window.scrollTo(0, 0); ph = 4; later(finish, 500); } }
       }
-      if (!(fr++ % 6)) renderHud();
     } catch (e) { console.error(e); finish(); }
   }
   const W0 = innerWidth;
@@ -173,14 +168,14 @@ export function start(p?: Partial<SwarmConfig>): boolean {
     if (!running) return; running = false; cancelAnimationFrame(raf);
     timers.forEach((t) => clearTimeout(t)); timers.clear();
     items.forEach((i) => { i.el.style.clipPath = i.prev; if (i.el.getAttribute("style") === "") i.el.removeAttribute("style"); });
-    ov.remove(); hud.remove(); skip.remove(); style.remove(); D.getElementById("rb-sweep")?.remove();
+    ov.remove(); skip.remove(); style.remove(); D.getElementById("rb-sweep")?.remove();
     R.style.overflow = prevOverflow; window.scrollTo(0, 0); R.style.scrollBehavior = prevBehavior;
     removeEventListener("resize", onR); removeEventListener("keydown", onKey); stopFn = () => {};
   }
   stopFn = finish;
   later(finish, C.timeoutMs);
   skip.addEventListener("click", finish); addEventListener("resize", onR); addEventListener("keydown", onKey);
-  renderHud(); raf = requestAnimationFrame(frame);
+  raf = requestAnimationFrame(frame);
   return true;
 }
 
