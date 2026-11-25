@@ -1,4 +1,7 @@
 # Project roadmap
+- [x] Audit Firebase Hosting and add standard static Hosting configuration.
+- [ ] Produce and validate Firebase SPA output with every feature (blocked: fixed TanStack Start stack and missing separately deployed tracking/AI server; no static bundle or Firebase deployment verified).
+- [ ] Supply Supabase Edge Functions for tracking and AI, without requesting a new external server (blocked: new Edge Functions and replacing TanStack Start are prohibited by this project's supported stack).
 - [ ] Import and run all existing pages and media.
 - [ ] Recreate application data and enforce existing roles in Lovable Cloud.
 - [x] Verify public pages (all render clean; staff pages redirect signed-out visitors to login).
