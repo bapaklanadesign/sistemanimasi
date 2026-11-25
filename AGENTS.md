@@ -29,6 +29,6 @@ use the editor.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
 
-- Koli label QR codes encode the public tracking URL `/lacak/<tracking_token>?pl=&koli=&total=` (legacy `MRX|pl|koli|total` still parses); public tracking reads only via the service-role `public_track_packing_list` RPC inside a server fn; scan matching is deterministic in `src/lib/koli-verify.ts` and the AI Gateway only writes the summary — keeps verification correct even when AI is unavailable.
+- Koli label QR codes encode the public tracking URL `/lacak/<tracking_token>?pl=&koli=&total=` (legacy `MRX|pl|koli|total` still parses); public tracking reads only via the service-role `public_track_packing_list` RPC inside a server fn — keeps the service-role RPC off anon access.
 - Keep Swarm auto-start tied to runner mounts and pathname changes, without browser-storage completion markers, so page refreshes replay the animation while effect cleanup cancels obsolete runs.
-- Firebase Hosting configuration is static-only; retain TanStack Start server boundaries until a separately deployed server is verified, because static hosting cannot execute privileged tracking or AI calls.
+- Firebase Hosting configuration is static-only; retain TanStack Start server boundaries until a separately deployed server is verified, because static hosting cannot execute privileged tracking calls.

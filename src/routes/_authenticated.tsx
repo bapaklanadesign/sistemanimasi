@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowLeftRight, ChartNoAxesColumn, ChevronDown, ClipboardList, Contact, FileSpreadsheet, FileText, History, LayoutGrid, List, LogOut, Menu, Package, Printer, ScanLine, ScrollText, Ship, Truck, UserCircle, Users, Wallet } from "lucide-react";
+import { ArrowLeftRight, ChartNoAxesColumn, ChevronDown, ClipboardList, Contact, FileSpreadsheet, FileText, History, LayoutGrid, List, LogOut, Menu, Package, Printer, ScrollText, Ship, Truck, UserCircle, Users, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { roleLabel, useAuth, type Role } from "@/lib/auth";
 import { areaOf, canBookkeeping, canOpen, canPacking, homeFor } from "@/lib/access";
@@ -33,7 +33,6 @@ const packingMenu = [
   { to: "/pengiriman", label: "Pengiriman", icon: Truck },
   { to: "/manifest", label: "Manifest Kapal", icon: ScrollText },
   { to: "/cetak-pdf", label: "Cetak PDF", icon: Printer },
-  { to: "/scan-koli", label: "Scan Label Koli", icon: ScanLine },
   { to: "/laporan-packing", label: "Laporan & Aktivitas", icon: ChartNoAxesColumn },
 ] as const;
 const adminTools = [

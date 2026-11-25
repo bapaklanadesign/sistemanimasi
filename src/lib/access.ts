@@ -9,7 +9,7 @@ const AREAS: Record<Exclude<Area, "common">, string[]> = {
   super: ["/dashboard", "/rekening", "/audit", "/pengguna"],
   bookkeeping: ["/dashboard-pembukuan", "/transaksi", "/laporan"],
   ledger: ["/transfer", "/import"],
-  packing: ["/dashboard-packing", "/packing-list", "/barang", "/pengirim-penerima", "/kapal-pelabuhan", "/pengiriman", "/manifest", "/cetak-pdf", "/scan-koli", "/laporan-packing"],
+  packing: ["/dashboard-packing", "/packing-list", "/barang", "/pengirim-penerima", "/kapal-pelabuhan", "/pengiriman", "/manifest", "/cetak-pdf", "/laporan-packing"],
 };
 
 export const canBookkeeping = (r: Role | null | undefined) => r === "super_admin" || r === "admin1" || r === "admin2";
