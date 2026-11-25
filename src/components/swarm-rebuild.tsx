@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { SwarmRebuild, type SwarmConfig } from "@/lib/swarm/swarm-rebuild";
 
-/** Global runner: plays the rebuild once per page path per session (auto mode). */
+/** Global runner: plays on each page mount (including refresh) and path change in auto mode. */
 export function SwarmRebuildRunner(props: { config?: Partial<SwarmConfig> }) {
   const path = useLocation({ select: (l) => l.pathname });
   const cfgRef = useRef(props.config);
@@ -13,8 +13,6 @@ export function SwarmRebuildRunner(props: { config?: Partial<SwarmConfig> }) {
   }, []);
   useEffect(() => {
     if (cfgRef.current?.auto === false) return;
-    const key = "swarm-rebuild:" + path;
-    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, "1"); } catch { /* ignore */ }
     SwarmRebuild.stop();
     const id = window.setTimeout(() => SwarmRebuild.start(), 400);
     return () => { clearTimeout(id); SwarmRebuild.stop(); };
