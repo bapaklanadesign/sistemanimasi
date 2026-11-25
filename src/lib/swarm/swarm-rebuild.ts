@@ -15,7 +15,7 @@ export const DEFAULT_ORDER = [
 export const DEFAULT_CONFIG: SwarmConfig = {
   auto: true, speed: 1, spread: 1, dwell: 1, cursors: null,
   colors: ["#FF3B4E", "#168BFF", "#00D4FF", "#2BE38B", "#FFD60A", "#A66BFF", "#FF7200"],
-  names: ["Ayu", "Bima", "Citra", "Dani", "Eka", "Fajar", "Gita"],
+  names: ["Fikih", "Jabar", "Leni", "Adam", "Sugeng", "Akbar"],
   order: DEFAULT_ORDER, maxElements: 140, timeoutMs: 240000,
 };
 const CSS = `#rb{position:absolute;left:0;top:0;width:100%;overflow:hidden;z-index:2147483000;pointer-events:none}
